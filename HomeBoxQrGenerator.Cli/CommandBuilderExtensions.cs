@@ -29,7 +29,7 @@ namespace HomeBoxQrGenerator.Cli {
             var hostOption = new Option<string>("--host", "The host address of the server") { IsRequired = true };
             var usernameOption = new Option<string>("--username", "The username used to login to the server") { IsRequired = true };
             var passwordOption = new Option<string>("--password", "The password used to login to the server") { IsRequired = true };
-            var outputPathOption = new Option<FileInfo>("--output", "The output location to put the file");
+            var outputPathOption = new Option<FileInfo>("--output", "The output location to put the file") { IsRequired = true };
 
             root.AddOption(typeOption);
             root.AddOption(queryOption);
