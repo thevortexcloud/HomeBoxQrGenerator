@@ -19,13 +19,27 @@ namespace HomeBoxQrGenerator.Cli {
                 }
             }
         }
+
+        /// <summary>
+        /// Handles a request to generate a specific location label
+        /// </summary>
+        /// <param name="options">The options to use to generate the location label</param>
+        /// <param name="output">Where to put the generated location label</param>
+        private static async Task HandleLocationGeneratorCommand(LocationGeneratorOptions options, FileInfo output) {
+            using (var fs = output.Open(FileMode.Create)) {
+                var generator = new LocationGenerator();
+                using (var result = await generator.GenerateAsync(options)) {
+                    await result.CopyToAsync(fs);
+                }
+            }
+        }
         #endregion
 
         #region Public methods
         public static CommandLineBuilder AddGeneratorCommand(this CommandLineBuilder builder) {
             var root = builder.Command;
             var typeOption = new Option<string>("--type", () => "item", "Allows for generating QR codes for the specific type. Currently only supports 'item'") { IsRequired = true };
-            var queryOption = new Option<string>("--query", "The query string. Can either be a search value or an id") { IsRequired = true };
+            var queryOption = new Option<string>("--query", "The query string. Can either be a search value or an id. NOTE Some types may only support an id") { IsRequired = true };
             var hostOption = new Option<string>("--host", "The host address of the server") { IsRequired = true };
             var usernameOption = new Option<string>("--username", "The username used to login to the server") { IsRequired = true };
             var passwordOption = new Option<string>("--password", "The password used to login to the server") { IsRequired = true };
@@ -51,6 +65,17 @@ namespace HomeBoxQrGenerator.Cli {
                         };
 
                         await HandleItemGenerationCommand(itemOptions, output);
+                        break;
+                    case "location":
+                        var locationOptions = new LocationGeneratorOptions {
+                            Server = new Uri(host),
+                            Credentials = new Credentials {
+                                Username = username,
+                                Password = password
+                            },
+                            LocationId = Guid.Parse(query)
+                        };
+                        await HandleLocationGeneratorCommand(locationOptions, output);
                         break;
                     default: throw new NotImplementedException();
                 }
