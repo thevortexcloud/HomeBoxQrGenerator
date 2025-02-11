@@ -30,7 +30,6 @@ namespace HomeBoxQrGenerator.Core.Generators {
                     itemId = Guid.Parse(item.Id);
                 }
 
-
                 var text = itemName;
                 return this.GenerateQrCode(new Uri($"{options.Server}/item/{itemId}"), options, text);
             }

@@ -4,6 +4,7 @@ using HomeBoxQrGenerator.Core.Models;
 namespace HomeBoxQrGenerator.Core.Generators {
     public class LocationGenerator : GeneratorBase<LocationGeneratorOptions> {
         #region Public methods
+        /// <inheritdoc />
         public override async Task<Stream> GenerateAsync(LocationGeneratorOptions options) {
             await using (var conn = new HomeBoxConnection(options.Server, options.Credentials)) {
                 await conn.ConnectAsync();

@@ -24,17 +24,18 @@ namespace HomeBoxQrGenerator.Core.Generators {
                 using (var qrCodeData = qrGenerator.CreateQrCode(uri.AbsoluteUri, QRCodeGenerator.ECCLevel.Q)) {
                     using (var qrCode = new PngByteQRCode(qrCodeData)) {
                         var qrCodeImage = qrCode.GetGraphic(options.Scale);
-                        //We use Skia to make some tweaks to the QR code (such as by putting text next to it)
-                        using (var qrbitmap = SKBitmap.Decode(qrCodeImage)) {
+                        //We use Skia to make some tweaks to the QR code (such as putting text next to it)
+                        using (var qrBitmap = SKBitmap.Decode(qrCodeImage)) {
                             using (var font = new SKFont(SKTypeface.FromFamilyName("Mono"), 20)) {
-                                using (var bitmap = new SKBitmap(300, qrbitmap.Height)) {
+                                using (var bitmap = new SKBitmap(300, qrBitmap.Height)) {
                                     using (var canvas = new SKCanvas(bitmap)) {
                                         //Make sure the background of the image is white to make it easier to read
                                         canvas.DrawColor(SKColor.Parse("FFFFFF"));
 
                                         var fontWidth = font.GetGlyphWidths(text);
-
-                                        var fontXOffset = qrbitmap.Width + 10;
+                                        //We need to offset the text from the left edge to make it readable (and not on top of/behind the QR code),
+                                        //so offset it by the entire QR code and a bit more 
+                                        var fontXOffset = qrBitmap.Width + 10;
                                         var fontYOffset = 20;
                                         //If we run out of horizontal space, we need to do some math to work out how to wrap the text
                                         if (fontWidth.Sum() + fontXOffset > bitmap.Width) {
@@ -47,23 +48,23 @@ namespace HomeBoxQrGenerator.Core.Generators {
                                                 brokenLines.Add(text[..firstSpace].Trim());
                                                 brokenLines.Add(text[firstSpace..].Trim());
 
-                                                //Draw each line offset from the previous line
+                                                //Draw each line, offset from the previous line
                                                 foreach (var split in brokenLines) {
                                                     canvas.DrawText(split, fontXOffset, fontYOffset, SKTextAlign.Left, font, new SKPaint());
 
                                                     fontYOffset += 20;
                                                 }
                                             } else {
-                                                throw new NotSupportedException();
+                                                throw new NotSupportedException("Unable to wrap text, it's likely you have a very long name");
                                             }
                                         } else {
                                             //No wrapping required, we can just write the text directly
                                             canvas.DrawText(text, fontXOffset, fontYOffset, SKTextAlign.Left, font, new SKPaint());
                                         }
 
-                                        canvas.DrawBitmap(qrbitmap, 10, 0);
+                                        canvas.DrawBitmap(qrBitmap, 10, 0);
 
-                                        //Generate the final output and return it to the caller
+                                        //Generate the final output and return it to the caller to deal with
                                         var resultStream = new MemoryStream();
                                         bitmap.Encode(SKEncodedImageFormat.Png, 100).AsStream().CopyTo(resultStream);
                                         resultStream.Position = 0;

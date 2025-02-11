@@ -7,7 +7,7 @@ namespace HomeBoxQrGenerator.Core.Models {
         /// <summary>
         /// A query or item id to use to locate an item on the server
         /// </summary>
-        public string ItemSearchQuery { get; init; }
+        public required string ItemSearchQuery { get; init; }
         #endregion
     }
 }
