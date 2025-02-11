@@ -6,7 +6,7 @@ This is a simple command line program to generate QR codes for [HomeBox](https:/
 
 1. You will need a copy of the [dotnet 9.0 SDK](https://dotnet.microsoft.com/en-us/download) for your platform if you do not have it already.
 2. Download a copy of the source code either by running `git clone https://github.com/thevortexcloud/HomeBoxQrGenerator.git` in a terminal, or downloading the [zip file](https://github.com/thevortexcloud/HomeBoxQrGenerator/archive/refs/heads/master.zip) from github and extract the files somewhere.
-3. Once you have downloaded everything, open a terminal/cmd/powershell window in the location where you put the source code.
+3. Once you have downloaded everything, open a terminal/cmd/powershell window in the location where you put the source code (you want to be in the root directory where the `HomeBoxQrGenerator.sln` file is).
 4. Run `dotnet build`
 5. Assuming it completes without errors, you should be able to navigate to the `HomeBoxQrGenerator.Cli/bin/` folder to find the compiled output.
 6. You have now compiled the program
