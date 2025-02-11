@@ -13,7 +13,7 @@ This is a simple command line program to generate QR codes for [HomeBox](https:/
 
 # Running
 
-All functionality can be executed by running the `HomeBoxQrGenerator.Cli.exe` file. This is a command line program as such it is expected to be run from a terminal. The following options are currently supported
+All functionality can be executed by running the `HomeBoxQrGenerator.Cli.exe` (or `HomeBoxQrGenerator.Cli` on Mac/Linux) file. This is a command line program as such it is expected to be run from a terminal. The following options are currently supported
 
 | Option     | Name     | Description                                                                                                                                                                                                                                            |
 |------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
